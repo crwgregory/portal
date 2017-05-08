@@ -1,0 +1,15 @@
+
+body {
+    min-height: 100%;
+    background-color: #f9f9f9;
+}
+body *, div *, input, select {
+    font-family: arial, helvetica, sans-serif;
+}
+
+input[type=submit][disabled]{
+    font-style: italic;
+}
+.no-padding-right{
+    padding-right: 0;
+}

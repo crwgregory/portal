@@ -1,0 +1,31 @@
+<div class="login-content">
+    <div class="logo col-md-12"></div>
+
+    <div class="login-box"  [customStyle]= "'login'">
+        <form #f="ngForm" (ngSubmit)="logForm(f.valid)" novalidate>
+            <div align="center">
+                <div *ngIf="(!f.valid && f.submitted) || error" class="alert alert-danger">
+                    <span [hidden]="!error || username.errors || password.errors">Invalid Username / Password</span>
+                    <span *ngIf="username.errors">Username</span>
+                    <span *ngIf="password.errors">
+                    <span *ngIf="username.errors"> / </span> Password
+                </span>
+                    is missing
+                </div>
+            </div>
+            <div><input type="text" name="username" placeholder="Username" [(ngModel)]="user.username" required
+                        #username="ngModel"
+                        autocomplete="off"/></div>
+            <div><input type="password" name="password" [(ngModel)]="user.password" placeholder="Password" required
+                        #password="ngModel"/></div>
+            <div>
+                <input type="submit" value="{{button}}" [disabled]="loading"/>
+            </div>
+            <div class="row links-row">
+                <div class="col-md-6"><span class="row">Forgot Password?</span></div>
+                <div class="col-md-6 text-right no-padding-right">Activate Account?</div>
+                <br style="clear: left" />
+            </div>
+        </form>
+    </div>
+</div>
