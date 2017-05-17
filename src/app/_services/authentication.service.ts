@@ -1,43 +1,35 @@
 import {Injectable} from '@angular/core';
-import {Http, Headers, Response, RequestOptions} from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import {Router} from '@angular/router';
-import {AppComponent} from '../app.component';
+
+import {CanActivate, Router} from '@angular/router';
+import * as configGlobals from '../_config/globals';
+import {HttpHelper} from '../_helpers/http.helper';
+
 @Injectable()
-export class AuthenticationService {
+export class AuthenticationService implements CanActivate {
 
-    private api: string;
-    private header: any;
-
-    constructor(private http: Http,
-                private router: Router,
-                private app: AppComponent
-    ) {
-        const headers = new Headers();
-        headers.append('Dev-Token', '7d95a43106acfd356448481e3bacb09a1af2e09256533d4d74719398e5b97d1e');
-        headers.append('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token , Authorization');
-        this.api = 'http://10.1.10.167:32769/employees/login';
-        this.header = headers;
+    constructor(private router: Router,
+                public http: HttpHelper) {
     }
-    checkUserAuthentication() {
-        if (!localStorage.getItem('currentUser')) {
-            this.app.isLogin = false;
+
+    canActivate() {
+        return this.checkSession();
+    }
+
+    checkSession() {
+        if (!sessionStorage.getItem('username')) {
+            console.log('not logged in');
             this.router.navigate(['login']);
             return false;
         }
-        this.app.isLogin = true;
         return true;
     }
-    login(username: string, password: string) {
-        return this.http.post(this.api, JSON.stringify({ username: username, password: password }), {headers: this.header})
-            .map((response: Response) => {
-                const result = response.json();
-                // login successful
-                if (result && result.data) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(result.data.username));
-                }
-            });
+
+    authLogin(username: string, password: string) {
+        const body = {'username': username, 'password': password};
+        const url = configGlobals.apiMarrick + configGlobals.apiMarrickRoutes.authenticate;
+
+        return this.http.post(url, body, {});
+
     }
+
 }

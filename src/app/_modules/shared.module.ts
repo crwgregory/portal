@@ -4,17 +4,17 @@
 
 import {NgModule} from '@angular/core';
 import {LoginComponent} from '../login/login.component';
-import {CustomDirective} from '../_directives/custom.directive';
+import {LogoDirective} from '../_directives/logo.directive';
 import {FormsModule} from '@angular/forms';
 @NgModule({
     declarations: [
         LoginComponent,
-        CustomDirective
+        LogoDirective
     ],
-    imports:[FormsModule],
+    imports: [FormsModule],
     exports: [
         LoginComponent,
-        CustomDirective
+        LogoDirective
     ]
 })
 export class SharedModule {

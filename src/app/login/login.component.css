@@ -1,10 +1,18 @@
 
 .login-box {
     max-width: 500px;
+    width: 500px;
     color: #CCCCCD;
     text-align: center;
     padding: 30px 0;
     background-color: #353D46;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+h4{
+    max-width: 300px;
+    width: 100%;
+    text-align: left;
 }
 
 input {
@@ -24,23 +32,20 @@ input[type=button]{
     background-color: #7CC3FF;
 }
 
-.logo {
-    margin: 10px 0;
-    color: inherit;
-    max-width: 100%;
 
-    background: url("images/logo.png") no-repeat;
-    align-self: flex-start;
-    width: 500px;
-    height: 62px;
-}
 .alert, .alert-danger{
+    padding: 0 0 0 5px;
+    text-align: left;
     max-width: 300px;
-    height: inherit;
+    height: 20px;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
-    border-radius:0;
+    border-radius: 2px;
     font-size: 12px;
+    background-color: inherit;
+    border: 1px solid #a94442;
+    margin-bottom: 10px;
+
 }
 .links-row{
     font-size: 11px;

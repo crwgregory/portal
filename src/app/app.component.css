@@ -7,9 +7,22 @@ body *, div *, input, select {
     font-family: arial, helvetica, sans-serif;
 }
 
-input[type=submit][disabled]{
-    font-style: italic;
-}
+
 .no-padding-right{
     padding-right: 0;
+}
+.btn-active {
+    font-style: italic;
+    font-weight: normal;
+
+}
+.logo {
+    margin: 10px 0;
+    color: inherit;
+    max-width: 100%;
+
+    background: url("images/logo.png") no-repeat;
+    align-self: flex-start;
+    width: 500px;
+    height: 62px;
 }

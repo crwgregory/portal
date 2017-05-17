@@ -1,13 +1,14 @@
-import {Component, ViewEncapsulation} from '@angular/core';
-
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    encapsulation: ViewEncapsulation.None
 
 })
 export class AppComponent {
-  isLogin = false;
-  title = 'app works!';
+    isLogin = false;
+    title = 'app works!';
+
+
 }
