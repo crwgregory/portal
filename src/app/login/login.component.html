@@ -1,52 +1,55 @@
-<div class="login-content" >
-    <div class="logo col-md-12"  [customStyle]="'logo'"></div>
-
-    <div class="login-box">
-        <div *ngIf="!loggedIn">
-            <form #f="ngForm" (ngSubmit)="login(f.valid)" novalidate>
-                <div align="center">
-                    <div *ngIf="error" class="alert alert-danger">
-                        Error: Invalid Username / Password
-                    </div>
-                    <div *ngIf="!error && !f.valid && f.submitted" class="alert alert-danger">
-                        Error:
-                        <span *ngIf="username.errors ">
-                            <span *ngIf="username.errors.required">Username is required</span>
-                        </span>
-                        <span *ngIf="password.errors && !username.errors">
-                            <span *ngIf="!password.errors.minLength">Password must be atleast 8 characters long.</span>
-                        </span>
-                    </div>
-
-                </div>
-                <div><input type="text" name="username" placeholder="Username" [(ngModel)]="user.username" required
-                            #username="ngModel"
-                            autocomplete="off" autofocus/></div>
-                <div><input type="password" name="password" [(ngModel)]="user.password" placeholder="Password" required
-                            minlength="8"
-                            #password="ngModel"/></div>
-                <div>
-                    <input type="submit" [attr.value]="loading? 'Signing in...' : 'SIGN IN'" [disabled]="loading"
-                           [ngClass]="{'btn-active': loading}"/>
-                </div>
-                <div class="row links-row">
-                    <div class="col-md-6"><span class="row"><a routerLink="['../account/forgot_Password']">Forgot Password?</a></span></div>
-                    <div class="col-md-6 text-right no-padding-right">Activate Account?</div>
-                    <br style="clear: left"/>
-                </div>
-            </form>
+<div class="login-content">
+    <div class="logo col-md-12" [customStyle]="'logo'"></div>
+    <div class="content-outer-box">
+        <div class="content-nav-top" *ngIf="username">
+            <span>{{username}}</span>
+            <span> | </span>
+            <span><a [routerLink]="['../login', 'logout']">Logout</a></span>
         </div>
-        <div *ngIf="loggedIn">
-            <div align="center">
-                <h4> Welcome {{user.username}}!</h4>
+        <div class="content-box">
+            <div *ngIf="!page">
+                <form #f="ngForm" (ngSubmit)="login(f.valid)" novalidate>
+                    <div align="center">
+                        <div *ngIf="error && f.submitted" class="alert alert-danger">
+                            <span *ngIf="errorText">{{errorText}}</span>
+                            <span *ngIf="!errorText"> {{messages.loginErrorPrefix}}{{messages.userInvalid}}</span>
+                        </div>
+                        <div *ngIf="!error && !f.valid && f.submitted" class="alert alert-danger" >
+                            {{messages.loginErrorPrefix}}
+                            <span *ngIf="username.errors ">
+                            <span *ngIf="username.errors.required">{{messages.usernameMissing}}</span>
+                        </span>
+                            <span *ngIf="password.errors && !username.errors">
+                            <span *ngIf="!password.errors.minLength">{{messages.loginPasswordLength}}</span>
+                        </span>
+                        </div>
+
+                    </div>
+                    <div><input type="text" name="username" placeholder="Username" [(ngModel)]="user.username" required
+                                #username="ngModel"
+                                autocomplete="off" autofocus/></div>
+                    <div><input type="password" name="password" [(ngModel)]="user.password" placeholder="Password"
+                                required
+                                minlength="8"
+                                #password="ngModel"/></div>
+                    <div>
+                        <input type="submit" [attr.value]="loading? 'Signing in...' : 'SIGN IN'" [disabled]="loading"
+                               [ngClass]="{'btn-active': loading}"/>
+                    </div>
+                    <div class="row links-row">
+                        <div class="col-md-6"><span class="row"><a
+                                (click)="openPage('forgot-password')">Forgot Password?</a></span></div>
+                        <div class="col-md-6 text-right no-padding-right"><a (click)="openPage('activate-account')">Activate
+                            Account?</a></div>
+                        <br style="clear: left"/>
+                    </div>
+                </form>
             </div>
-            <div><input type="button" [attr.value]="loading && toApp== 'portal'? 'Portal...' : 'Portal' "
-                        [disabled]="loading" (click)="sendToApp('portal')"
-                        [ngClass]="{'btn-active': loading && toApp== 'portal' }" #portal/></div>
-            <div><input type="button"
-                        [attr.value]="loading && toApp == 'passport'? 'My Injury Passport...' : 'My Injury Passport'"
-                        [disabled]="loading" (click)="sendToApp('passport')"
-                        [ngClass]="{'btn-active': loading && toApp == 'passport' }" #passport/></div>
+            <select-entity *ngIf="page == 'select-entity'"></select-entity>
+            <forgot-password *ngIf="page == 'forgot-password'" [page]="page"
+                             (pageChange)="openLogin()"></forgot-password>
+            <activate-account *ngIf="page == 'activate-account'" [page]="page"
+                              (pageChange)="openLogin()"></activate-account>
         </div>
     </div>
 </div>

@@ -10,24 +10,39 @@ import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class HttpHelper extends Http {
-    private http: any;
     private headers: any;
 
     constructor(backend: ConnectionBackend,
                 defaultOptions: RequestOptions,
                 private debugMode: boolean) {
+
         super(backend, defaultOptions);
+
+        this.debugMode = false;
+
         this.headers = new Headers();
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('Accept', 'application/json');
 
     }
 
+    get(url: string, options?: RequestOptionsArgs): Observable<any> {
+        if (this.debugMode) {
+            return super.get(url, this.customiseOptions(options))
+                .map(this.extractData)
+                .catch(this.handleError);
+        }
+        return super.get(url, this.customiseOptions(options));
+    }
+
     post(url: string, body: any, options?: RequestOptionsArgs): Observable<any> {
         JSON.stringify(this.customiseOptions(options));
-        return super.post(url, JSON.stringify(body), this.customiseOptions(options))
-            .map(this.extractData)
-            .catch(this.handleError);
+        if (this.debugMode) {
+            return super.post(url, JSON.stringify(body), this.customiseOptions(options))
+                .map(this.extractData)
+                .catch(this.handleError);
+        }
+        return super.post(url, JSON.stringify(body), this.customiseOptions(options));
     }
 
     private customiseOptions(options: any) {
@@ -40,8 +55,9 @@ export class HttpHelper extends Http {
     }
 
     private extractData(res: Response) {
-        let body = res.json();
-        return body.data || {};
+        const body = res.json();
+        console.log(JSON.stringify(body));
+        return body.error || {};
     }
 
     private handleError(error: Response | any) {
@@ -53,7 +69,10 @@ export class HttpHelper extends Http {
         if (error instanceof Response) {
             const body = error.json() || '';
             const err = body.error || JSON.stringify(body);
-            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+            errMsg = body.error;
+            console.log(`${error.status} - ${error.statusText || ''} ${err}`);
+            return Observable.throw(body);
+
         } else {
             errMsg = error.message ? error.message : error.toString();
         }

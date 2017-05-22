@@ -4,27 +4,27 @@ import {FormsModule} from '@angular/forms';
 import {BaseRequestOptions, HttpModule, RequestOptions, XHRBackend} from '@angular/http';
 
 import {AppComponent} from './app.component';
-import {LoginComponent} from './login/login.component';
+import {LoginComponent, LoginEntitiesComponent, ForgotPasswordComponent, ActivateAccountComponent} from './login/index';
 import {RoutesModule} from './routes/routes.module';
 import {RouterModule} from '@angular/router';
 import {AlertModule} from 'ngx-bootstrap';
+
 import {AuthenticationService} from './_services/index';
 import {LogoDirective} from './_directives/logo.directive';
-import {ApplicationComponent, QuestionsComponent, CategoriesNavComponent} from './application/index';
-import { HomeComponent } from './home/home.component';
 import {HttpHelper} from './_helpers/http.helper';
-import { EntityComponent } from './entity/entity.component';
+import {EntityComponent} from './entity/entity.component';
+import {GlobalHelper} from './_helpers/global.helper';
 
 @NgModule({
     declarations: [
         AppComponent,
         LoginComponent,
+        LoginEntitiesComponent,
+        ForgotPasswordComponent,
+        ActivateAccountComponent,
         LogoDirective,
-        ApplicationComponent,
-        QuestionsComponent,
-        CategoriesNavComponent,
-        HomeComponent,
-        EntityComponent
+        EntityComponent,
+
 
     ],
     imports: [
@@ -35,13 +35,16 @@ import { EntityComponent } from './entity/entity.component';
         RoutesModule,
         RouterModule,
     ],
-    providers: [ AuthenticationService, {
-        provide: HttpHelper,
-        useFactory:
-            (backend: XHRBackend, defaultOptions: RequestOptions) => {
+    providers: [
+        AuthenticationService,
+        GlobalHelper,
+        {
+            provide: HttpHelper,
+            useFactory: (backend: XHRBackend, defaultOptions: RequestOptions) => {
                 return new HttpHelper(backend, defaultOptions, false);
             },
-        deps: [ XHRBackend, RequestOptions]   } ],
+            deps: [XHRBackend, RequestOptions]
+        }],
     // fakeBackendProvider,
     // MockBackend,
     // BaseRequestOptions

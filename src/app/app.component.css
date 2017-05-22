@@ -7,7 +7,22 @@ body *, div *, input, select {
     font-family: arial, helvetica, sans-serif;
 }
 
-
+img:before {
+    content: 'Image Not Available';
+    color: #AAA;
+    font-size: 10px;
+    display: block;
+    position: absolute;
+    height: inherit;
+    width: inherit;
+    background: url('/images/no-image.png')  top left;
+    border: inherit;
+}
+a,
+a:hover{
+    cursor: pointer;
+    color: inherit;
+}
 .no-padding-right{
     padding-right: 0;
 }

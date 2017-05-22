@@ -4,15 +4,14 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {LoginComponent} from '../login/login.component';
-import {HomeComponent} from '../home/home.component';
 import {AuthenticationService} from '../_services/authentication.service';
 import {EntityComponent} from '../entity/entity.component';
 
 export const routes: Routes = [
-    {path: '', redirectTo: 'login', pathMatch: 'full'},
+    {path: '', component: EntityComponent, pathMatch: 'full'},
     {path: 'login', component: LoginComponent, pathMatch: 'full'},
     {path: 'login/:logout', component: LoginComponent},
-    {path: 'home', component: HomeComponent, canActivate: [AuthenticationService]},
+    // {path: 'home', component: HomeComponent, canActivate: [AuthenticationService]},
     // otherwise to entity
     {path: '**', component: EntityComponent}
 ];
