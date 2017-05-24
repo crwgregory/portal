@@ -12,12 +12,12 @@ import * as configMessages from '../_config/global-messages';
     selector: 'select-entity',
     template: `
         <div align="center">
-            <div *ngFor="let entity of entities;" [hidden]="!getAppProperty(entity)">
+            <div *ngFor="let entity of entities;" [hidden]="!getAppProperty(entity, null)">
                 <input type="button" [attr.value]="getAppProperty(entity, 'name')"
                        [disabled]="loading" (click)="redirect(entity, $event)"/>
 
             </div>
-            <div *ngIf="!entities.length" class="alert alert-danger">{{messages.userNoAccessRights}}
+            <div *ngIf="entityCount === 0" class="alert alert-danger">{{messages.userNoAccessRights}}
             </div>
         </div>`,
 
@@ -28,47 +28,35 @@ export class LoginEntitiesComponent {
     entities: any;
     configApps: {};
     messages: {};
+    entityCount: number;
 
     constructor(private route: Router,
                 private globalHelper: GlobalHelper) {
         const jwtData = this.globalHelper.parseJwt(sessionStorage.getItem('jwt'));
+        console.log(JSON.stringify(jwtData.entity_ids));
         this.entities = jwtData.entity_ids;
         this.configApps = configGlobals.entityData;
         this.messages = configMessages;
+        this.entityCount = 0;
 
     }
 
     redirect(entity, event) {
-
         this.loading = true;
         this.selectedEntity = entity;
         event.target.value = event.target.value + '...';
         event.target.classList.add('btn-active');
-        switch (entity) {
-            case 'portal':
-                this.route.navigate(['home']);
-                break;
-            case 'passport':
-                location.replace(configGlobals.entityData[configGlobals.entities[entity].url]);
-                break;
-            default:
-                location.replace(this.getAppProperty(entity, 'url'));
+        location.replace(this.getAppProperty(entity, 'url'));
 
-        }
     }
 
     getAppProperty(entityID, propertyName) {
-        if (propertyName) {
-            let name = '';
-            if (!configGlobals.entityData[entityID]) {
-                this.entities.splice(this.entities.indexOf(entityID), 1);
-                console.log(JSON.stringify(this.entities));
-            } else {
-                name = configGlobals.entityData[entityID][propertyName];
-            }
-            return name;
-
+        if (!configGlobals.entityData[entityID]) {
+            console.log('N O EN TI YT FOND');
+            return null;
         }
-        return configGlobals.entityData[entityID] ? '1' : null;
+
+        this.entityCount++;
+        return configGlobals.entityData[entityID][propertyName] || entityID;
     }
 }

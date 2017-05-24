@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import {Observable} from 'rxjs/Observable';
+import * as configGlobals from '../_config/globals';
 
 @Injectable()
 export class HttpHelper extends Http {
@@ -27,6 +28,9 @@ export class HttpHelper extends Http {
     }
 
     get(url: string, options?: RequestOptionsArgs): Observable<any> {
+        if (url.substr(0, 4).indexOf('http') !== 0) {
+            url = configGlobals.apiMarrick + url;
+        }
         if (this.debugMode) {
             return super.get(url, this.customiseOptions(options))
                 .map(this.extractData)

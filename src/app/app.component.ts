@@ -11,8 +11,9 @@ import * as configGlobals from './_config/globals';
 })
 export class AppComponent {
     isLogin = false;
-
     constructor(private titleService: Title) {
+        console.log('in app component');
+
         this.titleService.setTitle(configGlobals.defaultTitle);
     }
 

@@ -1,8 +1,11 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpHelper} from '../_helpers/http.helper';
 import {Title} from '@angular/platform-browser';
 import * as configGlobals from '../_config/globals';
+import * as configMessages from '../_config/global-messages';
+
+import {APP_BASE_HREF} from '@angular/common';
 
 @Component({
     selector: 'app-entity',
@@ -17,6 +20,12 @@ import * as configGlobals from '../_config/globals';
             text-align: right;
         }
 
+        .contents,         
+        .contents  div
+        {
+            width: 100%;
+            text-align: center;
+        }
     `],
 
 })
@@ -25,64 +34,85 @@ export class EntityComponent implements OnInit {
     goToEntity: string;
     locationID: string;
     locationName: string;
+    pageLoader: true;
+    error: string
 
     constructor(private router: Router,
                 private activatedRoute: ActivatedRoute,
                 private http: HttpHelper,
-                private titleService: Title) {
+                private titleService: Title,
+                @Inject(APP_BASE_HREF) private baseHref: string) {
+        console.log('My base href' + this.baseHref);
+        this.error = null;
     }
 
     ngOnInit() {
         this.resetLocation = null;
-        console.log('on init');
-        for (let i = 0; i < localStorage.length; i++) {
-            console.log(localStorage.key(i));
-        }
-        if (sessionStorage.getItem('jwt') === null) {
-            // localStorage.setItem('logo', 'background-image: url("/images/logo/panda.jpeg"); width:278px; height:181px;');
-            const defaultSlug = localStorage.getItem('defaultUrlSlug');
-            if (this.router.url === '/') {
-                console.log('slug ' + defaultSlug);
-                //
-                //     if (localStorage.getItem('defaultUrlSlug')) {
-                //         console.log('redirecting....');
-                //
-                //         this.router.navigate([defaultSlug]);
-                //         localStorage.setItem('resetLocation', '1');
-                //     }
-                //
-                this.notEntity();
-            } else {
-                console.log(this.router.url);
-                const entity = this.router.url.replace('/', '');
-                this.deleteCache();
-                localStorage.setItem('defaultUrlSlug', this.router.url);
-                if (configGlobals.entities.hasOwnProperty(entity)) {
-                    console.log('For entity - ' + entity);
-                    localStorage.setItem('entityID', configGlobals.entities[entity]);
-                } else {
-                    this.validateUrl();
-                    // if (defaultSlug === this.router.url && localStorage.getItem('resetLocation')) {
-                    //     this.resetLocation = this.locationName;
-                    // }
-                }
-            }
+        // for (let i = 0; i < localStorage.length; i++) {
+        //     console.log(localStorage.key(i));
+        // }
+        // if (sessionStorage.getItem('jwt') === null) {
+        console.log(this.router.url);
+        // this.router.navigate([getBaseLocation()])
+        //     .catch(e => {
+        //         console.log('Route not found, redirection stopped with no error raised');
+        //     });
+        // if (!localStorage.getItem('appBase') || localStorage.getItem('appBase') !== getBaseLocation()) {
+        //     localStorage.setItem('appBase', getBaseLocation()) ;
+        // // }
+        // console.log('BASE : ' + JSON.stringify(window['_app_base']));
+        // // localStorage.setItem('logo', 'background-image: url("/images/logo/panda.jpeg"); width:278px; height:181px;');
+        // const indexRoute = localStorage.getItem('indexRoute');
+        // if (this.router.url === '/') {
+        //     console.log('indexRoute: ' + indexRoute);
+        //     //
+        //     //     if (localStorage.getItem('indexRoute')) {
+        //     //         console.log('redirecting....');
+        //     //
+        //     //         this.router.navigate([indexRoute]);
+        //     //         localStorage.setItem('resetLocation', '1');
+        //     //     }
+        //     //
+        //     this.notEntity();
+        // } else {
+        //     console.log(this.router.url);
+        //     const entity = this.router.url.replace('/', '');
+        //     this.deleteCache();
+        //     localStorage.setItem('defaultUrlSlug', this.router.url);
+        //     if (configGlobals.entities.hasOwnProperty(entity)) {
+        //         console.log('For entity - ' + entity);
+        //         localStorage.setItem('entityID', configGlobals.entities[entity]);
+        //     } else {
+        //         // this.validateUrl();
+        //         // if (defaultSlug === this.router.url && localStorage.getItem('resetLocation')) {
+        //         //     this.resetLocation = this.locationName;
+        //         // }
+        //     }
+        // }
+        // }
+        if (localStorage.getItem('locationID') === '0') {
+            console.log('IS LOCATIOn');
+
+            this.validateUrl();
+        } else {
+            console.log('NOT LOCATIOn');
         }
     }
 
     validateUrl() {
-        console.log('In validate ');
+        console.log('In validate ' + this.baseHref);
+        const paths = this.baseHref.split('/');
 
         let body = 'styles=1&organization_pathname=';
-        body = (this.activatedRoute.snapshot.url.length > 0) ? body + this.activatedRoute.snapshot.url[0].path : body;
-        body = (this.activatedRoute.snapshot.url.length > 1) ? body + '&location_pathname=' + this.activatedRoute.snapshot.url[1].path : body;
+        body = (paths.length > 0) ? body + paths[1] : body;
+        body = (paths.length > 2) ? body + '&location_pathname=' + paths[2] : body;
 
         const url = configGlobals.apiMarrick + configGlobals.apiMarrickRoutes.authenticateLocation + '?' + body;
         console.log(url);
         return this.http.get(url, {}).subscribe(
             res => {
                 const data = res.json().data;
-                console.log('data - ' + JSON.stringify(data.name));
+                console.log('data - ' + JSON.stringify(data));
 
                 this.locationID = data.id;
                 localStorage.setItem('template', data.template);
@@ -92,8 +122,10 @@ export class EntityComponent implements OnInit {
                 this.titleService.setTitle(data.name);
             },
             error => {
-                console.log('In error ' + JSON.stringify(error));
-                this.notEntity();
+                this.error = configMessages.incorrectLocation;
+                localStorage.removeItem('locationID');
+                console.log('In error: LOCATION NOT FOUND ');
+                // this.router.navigate(['404']);
 
             }
         );
@@ -109,7 +141,7 @@ export class EntityComponent implements OnInit {
     deleteCache() {
 
         localStorage.clear();
-        // localStorage.setItem('defaultUrlSlug', '');
+        // localStorage.setItem('indexRoute', '');
 
     }
 

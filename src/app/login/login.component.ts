@@ -38,21 +38,23 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         this.page = false;
-
         this.user = {username: '', password: ''};
 
-        if (sessionStorage.getItem('username')) {
 
             this.activatedRoute.params
                 .subscribe((urlParams: Params) => {
                     if (urlParams['logout'] === 'logout') {
-                        this.logout();
-                        this.error = true;
-                        this.errorText = this.messages.loggedOut;
+                        if (sessionStorage.getItem('username')) {
+
+                            this.logout();
+                            this.error = true;
+                            this.errorText = this.messages.loggedOut;
+                        } else {
+                            this.route.navigate(['']);
+                        }
                     }
 
                 });
-        }
         if (sessionStorage.getItem('username') && sessionStorage.getItem('jwt')) {
             this.page = 'select-entity';
             this.user.username = sessionStorage.getItem('username');
@@ -97,7 +99,7 @@ export class LoginComponent implements OnInit {
                         } else {
                             sessionStorage.setItem('username', this.user.username);
                             sessionStorage.setItem('jwt', data.jwt);
-                            if (jwtData.entity_ids.length === 1 && configGlobals.entityData[jwtData.entity_ids[0]].url) {
+                            if (jwtData.entity_ids.length === 1 && configGlobals.entityData[jwtData.entity_ids[0]]) {
                                 window.location.replace(configGlobals.entityData[jwtData.entity_ids[0]].url);
                             } else {
                                 this.page = 'select-entity';

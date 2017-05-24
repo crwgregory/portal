@@ -13,7 +13,7 @@ export const entityData = {
         "url": "http://intranet.marrickmedical.com/",
         "name": "Marrick Medical Intranet"
     },
-    "23": {
+    "2": {
         "url": "http://localhost:4202/",
         "name": "My Injury Passport"
     },
@@ -24,6 +24,7 @@ export const entityData = {
 
 };
 export const apiMarrick = 'http://localhost:8080';
+
 export const apiMarrickRoutes = {
     "authenticateUser": "/authenticate/user",
     "authenticateEntityUser": "/authenticate/entity/[id]",

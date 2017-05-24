@@ -2,18 +2,20 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {BaseRequestOptions, HttpModule, RequestOptions, XHRBackend} from '@angular/http';
+import {APP_BASE_HREF, Location, LocationStrategy} from '@angular/common';
 
 import {AppComponent} from './app.component';
 import {LoginComponent, LoginEntitiesComponent, ForgotPasswordComponent, ActivateAccountComponent} from './login/index';
 import {RoutesModule} from './routes/routes.module';
 import {RouterModule} from '@angular/router';
-import {AlertModule} from 'ngx-bootstrap';
+import {EntityComponent} from './entity/entity.component';
 
 import {AuthenticationService} from './_services/index';
 import {LogoDirective} from './_directives/logo.directive';
-import {HttpHelper} from './_helpers/http.helper';
-import {EntityComponent} from './entity/entity.component';
-import {GlobalHelper} from './_helpers/global.helper';
+import {GlobalHelper, HttpHelper, CustomLocationStrategy} from './_helpers/index';
+import {Error404Component} from './error-404';
+import {getBaseLocation} from './_helpers/helper-functions';
+import {ErrorOnPageComponent} from './error-on-page.component';
 
 @NgModule({
     declarations: [
@@ -24,11 +26,11 @@ import {GlobalHelper} from './_helpers/global.helper';
         ActivateAccountComponent,
         LogoDirective,
         EntityComponent,
-
+        Error404Component,
+        ErrorOnPageComponent
 
     ],
     imports: [
-        AlertModule.forRoot(),
         BrowserModule,
         FormsModule,
         HttpModule,
@@ -44,7 +46,12 @@ import {GlobalHelper} from './_helpers/global.helper';
                 return new HttpHelper(backend, defaultOptions, false);
             },
             deps: [XHRBackend, RequestOptions]
-        }],
+        },
+        // [{provide: APP_BASE_HREF, useValue: window.location.pathname}, {provide: LocationStrategy, useClass: CustomLocationStrategy}]
+        {provide: APP_BASE_HREF, useValue: getBaseLocation()}
+
+    ],
+
     // fakeBackendProvider,
     // MockBackend,
     // BaseRequestOptions

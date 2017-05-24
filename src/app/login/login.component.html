@@ -1,4 +1,5 @@
 <div class="login-content">
+    <a [routerLink]="['../login']"> test</a>
     <div class="logo col-md-12" [customStyle]="'logo'"></div>
     <div class="content-outer-box">
         <div class="content-nav-top" *ngIf="username">
@@ -10,7 +11,7 @@
             <div *ngIf="!page">
                 <form #f="ngForm" (ngSubmit)="login(f.valid)" novalidate>
                     <div align="center">
-                        <div *ngIf="error && f.submitted" class="alert alert-danger">
+                        <div *ngIf="error" class="alert alert-danger">
                             <span *ngIf="errorText">{{errorText}}</span>
                             <span *ngIf="!errorText"> {{messages.loginErrorPrefix}}{{messages.userInvalid}}</span>
                         </div>

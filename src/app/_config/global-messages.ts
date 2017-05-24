@@ -11,3 +11,4 @@ export const userInvalid = 'Invalid Username / Password';
 export const loginPasswordLength = 'Password must be atleast 8 characters long.';
 export const usernameMissing = 'Username Missing';
 export const loggedOut = 'You have successfully logged out!';
+export const incorrectLocation = 'Location does not exist';
