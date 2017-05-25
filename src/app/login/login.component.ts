@@ -85,11 +85,6 @@ export class LoginComponent implements OnInit {
 
                         this.loading = false;
                         const jwtData = this.globalHelper.parseJwt(data.jwt);
-                        if (jwtData.entity_ids === null) {
-                            console.log('!!!!!API ROUTE PENDING!!!!!!');
-                            console.log('try to access location URL');
-
-                        }
                         if (jwtData.entity_ids === null || jwtData.entity_ids.length < 1) {
                             this.error = true;
                             this.errorText = configMessages.userNoAccessRights;

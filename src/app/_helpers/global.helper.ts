@@ -4,8 +4,6 @@
 import {Injectable} from '@angular/core';
 import {HttpHelper} from './http.helper';
 
-@Injectable()
-
 export class GlobalHelper {
     constructor() {
     }

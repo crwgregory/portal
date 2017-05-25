@@ -12,7 +12,6 @@ export class CustomTemplateDirective {
 template: any;
 componentName : string;
     constructor(private el: ElementRef) {
-        console.log('componentName = ' + this.el.nativeElement.id);
         this.componentName = this.el.nativeElement.getAttribute('data-style-key');
         this.updateCSS();
 
@@ -23,10 +22,9 @@ componentName : string;
     //
     // }
     updateCSS() {
-        console.log('show componentName = ' + this.componentName);
         if (localStorage.getItem('template')) {
             this.template = JSON.parse(localStorage.getItem('template'));
-            console.log(this.componentName + ' - template= ' + JSON.stringify(this.template[this.componentName]));
+            // console.log(this.componentName + ' - template= ' + JSON.stringify(this.template[this.componentName]));
 
             if (this.template[this.componentName]) {
 
