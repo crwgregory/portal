@@ -1,4 +1,3 @@
-<app-login *ngIf="!error"></app-login>
-<div class="login-content" *ngIf="resetLocation"><a (click)="notEntity()">Not <b>{{locationName}}?</b></a></div>
-<div  class="contents">
+<page-loader *ngIf="pageLoader"></page-loader>
+<app-login *ngIf="!error && !pageLoader"></app-login>
 <error-on-page [message]="error" *ngIf="error"></error-on-page>

@@ -58,7 +58,6 @@ export class LoginComponent implements OnInit {
         if (sessionStorage.getItem('username') && sessionStorage.getItem('jwt')) {
             this.page = 'select-entity';
             this.user.username = sessionStorage.getItem('username');
-
         }
 
     }

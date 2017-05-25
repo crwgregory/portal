@@ -1,7 +1,6 @@
 <div class="login-content">
-    <a [routerLink]="['../login']"> test</a>
-    <div class="logo col-md-12" [customStyle]="'logo'"></div>
-    <div class="content-outer-box">
+    <div class="logo col-md-12" [customStyle] data-style-key="logo"></div>
+    <div class="content-outer-box" [customStyle] data-style-key="login-box">
         <div class="content-nav-top" *ngIf="username">
             <span>{{username}}</span>
             <span> | </span>
@@ -15,7 +14,7 @@
                             <span *ngIf="errorText">{{errorText}}</span>
                             <span *ngIf="!errorText"> {{messages.loginErrorPrefix}}{{messages.userInvalid}}</span>
                         </div>
-                        <div *ngIf="!error && !f.valid && f.submitted" class="alert alert-danger" >
+                        <div *ngIf="!error && !f.valid && f.submitted" class="alert alert-danger">
                             {{messages.loginErrorPrefix}}
                             <span *ngIf="username.errors ">
                             <span *ngIf="username.errors.required">{{messages.usernameMissing}}</span>
@@ -28,14 +27,14 @@
                     </div>
                     <div><input type="text" name="username" placeholder="Username" [(ngModel)]="user.username" required
                                 #username="ngModel"
-                                autocomplete="off" autofocus/></div>
+                                autocomplete="off" autofocus [customStyle] data-style-key="input-box"/></div>
                     <div><input type="password" name="password" [(ngModel)]="user.password" placeholder="Password"
                                 required
                                 minlength="8"
-                                #password="ngModel"/></div>
+                                #password="ngModel" [customStyle] data-style-key="input-box"/></div>
                     <div>
                         <input type="submit" [attr.value]="loading? 'Signing in...' : 'SIGN IN'" [disabled]="loading"
-                               [ngClass]="{'btn-active': loading}"/>
+                               [ngClass]="{'btn-active': loading}" [customStyle] data-style-key="button"/>
                     </div>
                     <div class="row links-row">
                         <div class="col-md-6"><span class="row"><a

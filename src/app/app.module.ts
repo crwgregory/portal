@@ -11,11 +11,11 @@ import {RouterModule} from '@angular/router';
 import {EntityComponent} from './entity/entity.component';
 
 import {AuthenticationService} from './_services/index';
-import {LogoDirective} from './_directives/logo.directive';
-import {GlobalHelper, HttpHelper, CustomLocationStrategy} from './_helpers/index';
+import {GlobalHelper, HttpHelper} from './_helpers/index';
 import {Error404Component} from './error-404';
 import {getBaseLocation} from './_helpers/helper-functions';
-import {ErrorOnPageComponent} from './error-on-page.component';
+import {ErrorOnPageComponent, PageLoaderComponent} from './_common/index';
+import {CustomTemplateDirective} from './_directives/custom-template.directive';
 
 @NgModule({
     declarations: [
@@ -24,10 +24,11 @@ import {ErrorOnPageComponent} from './error-on-page.component';
         LoginEntitiesComponent,
         ForgotPasswordComponent,
         ActivateAccountComponent,
-        LogoDirective,
+        CustomTemplateDirective,
         EntityComponent,
         Error404Component,
-        ErrorOnPageComponent
+        ErrorOnPageComponent,
+        PageLoaderComponent
 
     ],
     imports: [
@@ -48,7 +49,10 @@ import {ErrorOnPageComponent} from './error-on-page.component';
             deps: [XHRBackend, RequestOptions]
         },
         // [{provide: APP_BASE_HREF, useValue: window.location.pathname}, {provide: LocationStrategy, useClass: CustomLocationStrategy}]
-        {provide: APP_BASE_HREF, useValue: getBaseLocation()}
+        {provide: APP_BASE_HREF, useFactory: function () {
+            return getBaseLocation();
+        }}
+        // useValue: getBaseLocation(),
 
     ],
 
