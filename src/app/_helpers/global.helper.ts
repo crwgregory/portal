@@ -1,10 +1,6 @@
 /**
  * Created by s.naik on 5/22/17.
  */
-import {Injectable} from '@angular/core';
-import {HttpHelper} from './http.helper';
-
-@Injectable()
 
 export class GlobalHelper {
     constructor() {

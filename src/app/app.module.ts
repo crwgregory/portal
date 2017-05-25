@@ -48,7 +48,15 @@ import {ErrorOnPageComponent} from './error-on-page.component';
             deps: [XHRBackend, RequestOptions]
         },
         // [{provide: APP_BASE_HREF, useValue: window.location.pathname}, {provide: LocationStrategy, useClass: CustomLocationStrategy}]
-        {provide: APP_BASE_HREF, useValue: getBaseLocation()}
+        {provide: APP_BASE_HREF, useFactory: () => {
+          getBaseLocation().then((res) => {
+            console.log('resolve in provider');
+            return res
+          }).catch((err) => {
+            console.error('reject in provider', err);
+            return ''
+          })
+        }}
 
     ],
 
