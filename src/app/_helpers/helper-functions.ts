@@ -2,11 +2,9 @@
  * Created by s.naik on 5/23/17.
  */
 import * as configGlobals from '../_config/globals';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
-import {HttpHelper} from "./http.helper";
 
-export function getBaseLocation() {
+export function getBaseLocation():Promise<string> {
 
   return new Promise((resolve, reject) => {
     const paths = window.location.pathname.split('/');
@@ -47,14 +45,14 @@ export function getBaseLocation() {
   });
 }
 
-function returnBasePath(basePath) {
+function returnBasePath(basePath):string {
   basePath = '/' + basePath;
   localStorage.setItem('baseUrl', basePath);
   console.log(basePath);
   return basePath;
 }
 
-export function getLocationsData(url) {
+export function getLocationsData(url):Promise<null> {
 
     let req = new XMLHttpRequest();
 

@@ -1,8 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {BaseRequestOptions, HttpModule, RequestOptions, XHRBackend} from '@angular/http';
-import {APP_BASE_HREF, Location, LocationStrategy} from '@angular/common';
+import {HttpModule, RequestOptions, XHRBackend} from '@angular/http';
+import {APP_BASE_HREF} from '@angular/common';
 
 import {AppComponent} from './app.component';
 import {LoginComponent, LoginEntitiesComponent, ForgotPasswordComponent, ActivateAccountComponent} from './login/index';
@@ -12,10 +12,22 @@ import {EntityComponent} from './entity/entity.component';
 
 import {AuthenticationService} from './_services/index';
 import {LogoDirective} from './_directives/logo.directive';
-import {GlobalHelper, HttpHelper, CustomLocationStrategy} from './_helpers/index';
+import {GlobalHelper, HttpHelper} from './_helpers/index';
 import {Error404Component} from './error-404';
-import {getBaseLocation} from './_helpers/helper-functions';
 import {ErrorOnPageComponent} from './error-on-page.component';
+import {LocationService} from "./_services/location.service";
+
+export function httpFactory(backend: XHRBackend, defaultOptions: RequestOptions) {
+  return new HttpHelper(backend, defaultOptions, false);
+}
+
+export function loadBaseHref(location:LocationService) {
+  return () => location.loadBaseHref()
+}
+
+export function getBaseHref(location:LocationService) {
+  return location.baseHref
+}
 
 @NgModule({
     declarations: [
@@ -40,24 +52,24 @@ import {ErrorOnPageComponent} from './error-on-page.component';
     providers: [
         AuthenticationService,
         GlobalHelper,
+        LocationService,
+        {
+          provide: APP_INITIALIZER,
+          useFactory: loadBaseHref,
+          deps: [LocationService],
+          multi: true
+        },
         {
             provide: HttpHelper,
-            useFactory: (backend: XHRBackend, defaultOptions: RequestOptions) => {
-                return new HttpHelper(backend, defaultOptions, false);
-            },
+            useFactory: httpFactory,
             deps: [XHRBackend, RequestOptions]
         },
         // [{provide: APP_BASE_HREF, useValue: window.location.pathname}, {provide: LocationStrategy, useClass: CustomLocationStrategy}]
-        {provide: APP_BASE_HREF, useFactory: () => {
-          getBaseLocation().then((res) => {
-            console.log('resolve in provider');
-            return res
-          }).catch((err) => {
-            console.error('reject in provider', err);
-            return ''
-          })
-        }}
-
+        {
+          provide: APP_BASE_HREF,
+          useFactory: getBaseHref,
+          deps: [LocationService]
+        }
     ],
 
     // fakeBackendProvider,

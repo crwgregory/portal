@@ -6,6 +6,8 @@ import * as configGlobals from '../_config/globals';
 import * as configMessages from '../_config/global-messages';
 
 import {APP_BASE_HREF} from '@angular/common';
+import * as webdriver from "selenium-webdriver";
+import Thenable = webdriver.promise.Thenable;
 
 @Component({
     selector: 'app-entity',
@@ -42,7 +44,7 @@ export class EntityComponent implements OnInit {
                 private http: HttpHelper,
                 private titleService: Title,
                 @Inject(APP_BASE_HREF) private baseHref: string) {
-        console.log('My base href' + this.baseHref);
+        console.log('My base href ' + this.baseHref);
         this.error = null;
     }
 
@@ -90,18 +92,26 @@ export class EntityComponent implements OnInit {
         //     }
         // }
         // }
-        if (localStorage.getItem('locationID') === '0') {
-            console.log('IS LOCATIOn');
 
-            this.validateUrl();
-        } else {
-            console.log('NOT LOCATIOn');
-        }
+      // (this.baseHref).then(href => {
+      //   console.log('href', href)
+      // }).catch(err => {
+      //   console.error(err)
+      // });
+
+        // if (localStorage.getItem('locationID') === '0') {
+        //     console.log('IS LOCATIOn');
+        //
+        //     this.validateUrl();
+        // } else {
+        //     console.log('NOT LOCATIOn');
+        // }
     }
 
     validateUrl() {
         console.log('In validate ' + this.baseHref);
-        const paths = this.baseHref.split('/');
+        // const paths = this.loadBaseHref.split('/');
+      let paths = '';
 
         let body = 'styles=1&organization_pathname=';
         body = (paths.length > 0) ? body + paths[1] : body;
