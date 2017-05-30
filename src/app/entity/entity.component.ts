@@ -15,7 +15,7 @@ import {APP_BASE_HREF} from '@angular/common';
 export class EntityComponent implements OnInit {
     locationID: string;
     locationName: string;
-    error: string
+    error: string;
     pageLoader = true;
 
     constructor(private router: Router,
@@ -32,8 +32,6 @@ export class EntityComponent implements OnInit {
         } else{
             this.pageLoader = false;
         }
-
-
     }
 
     validateUrl() {

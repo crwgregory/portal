@@ -36,7 +36,7 @@ a:hover{
     color: inherit;
     max-width: 100%;
 
-    background: url("images/logo.png") no-repeat;
+    background: url("/images/logo.png") no-repeat;
     align-self: flex-start;
     width: 500px;
     height: 62px;
