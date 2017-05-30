@@ -1,8 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {BaseRequestOptions, HttpModule, RequestOptions, XHRBackend} from '@angular/http';
-import {APP_BASE_HREF, Location, LocationStrategy} from '@angular/common';
+import {HttpModule, RequestOptions, XHRBackend} from '@angular/http';
+import {APP_BASE_HREF} from '@angular/common';
 
 import {AppComponent} from './app.component';
 import {LoginComponent, LoginEntitiesComponent, ForgotPasswordComponent, ActivateAccountComponent} from './login/index';
@@ -13,7 +13,6 @@ import {EntityComponent} from './entity/entity.component';
 import {AuthenticationService, LocationService} from './_services/index';
 import {GlobalHelper, HttpHelper,} from './_helpers/index';
 import {Error404Component} from './error-404';
-import {getBaseLocation} from './_helpers/helper-functions';
 import {ErrorOnPageComponent, PageLoaderComponent} from './_common/index';
 import {CustomTemplateDirective} from './_directives/custom-template.directive';
 
